@@ -1,12 +1,8 @@
 # EnsembleSINDy
  
-Ensemble-SINDy: Robust sparse identification of nonlinear dynamics for ordinary- and partial differential equations with uncertainty quantification
-
-Urban Fasel^1, J. Nathan Kutz^2, Bingni W. Brunton^3, Steven L. Brunton^1
-
-^1 Department of Mechanical Engineering, University of Washington, USA  
-^2 Department of Applied Mathematics, University of Washington, USA  
-^3 Department of Biology, University of Washington, USA  
+Ensemble-SINDy: Robust sparse identification of nonlinear dynamics for ordinary- and partial differential equations with uncertainty quantification  
+Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton  
+University of Washington
 
 
 This repository contains Matlab code to reproduce the results of the paper. 
@@ -40,3 +36,6 @@ PDE-FIND/main_weakEnsemblePDE.m
 
 PDE-FIND/main_get_FiguresTable.m
  * plot figures shown in table below 
+
+
+EnsembleSINDy/PDE-FIND/PlotsPaper/table_ensemble-PDEFIND.pdf
