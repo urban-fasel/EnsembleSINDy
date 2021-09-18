@@ -41,5 +41,4 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
 [PDE-FIND/main_get_FiguresTable.m](/PDE-FIND/main_get_FiguresTable.m)  
  * plot figures shown in table below 
 
-
 ![table_ensemble-PDEFIND](/PDE-FIND/PlotsPaper/table_ensemble-PDEFIND.png)
