@@ -26,7 +26,7 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
     * SINDy coefficient uncertainties and inclusion probabilities
     * ensemble dynamics reconstruction and forecast 
 
-### Lotka Volterra Lynx and Hare polpulation data 1900-1920 Hudson Bay Company
+### Lotka Volterra: Lynx and Hare polpulation data 1900-1920 Hudson Bay Company
 
 [SINDy/main_runLotkaVolterra.m](/SINDY/main_runLotkaVolterra.m)  
  * SINDy coefficient uncertainties and inclusion probabilities
