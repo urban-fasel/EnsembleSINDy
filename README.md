@@ -1,12 +1,8 @@
 # EnsembleSINDy
  
-Ensemble-SINDy: Robust sparse identification of nonlinear dynamics for ordinary- and partial differential equations with uncertainty quantification
-
-Urban Fasel^1, J. Nathan Kutz^2, Bingni W. Brunton^3, Steven L. Brunton^1
-
-^1 Department of Mechanical Engineering, University of Washington, USA  
-^2 Department of Applied Mathematics, University of Washington, USA  
-^3 Department of Biology, University of Washington, USA  
+Ensemble-SINDy: Robust sparse identification of nonlinear dynamics for ordinary- and partial differential equations with uncertainty quantification  
+Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton  
+University of Washington
 
 
 This repository contains Matlab code to reproduce the results of the paper. 
@@ -33,10 +29,13 @@ SINDy/main_runLotkaVolterra.m
  * ensemble dynamics reconstruction
 
 
-## PDE-FIND
+## Ensemble-PDE-FIND
 
 PDE-FIND/main_weakEnsemblePDE.m
  * run comparison between weak PDE-FIND and weak-ensemble PDE-FIND to identify five different PDEs fromvery noisy data
 
 PDE-FIND/main_get_FiguresTable.m
  * plot figures shown in table below 
+
+
+![table_ensemble-PDEFIND](https://user-images.githubusercontent.com/60729896/133896254-97fb3164-c0e2-485b-8469-d92ce4a4a6b1.png)
