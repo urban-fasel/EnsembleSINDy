@@ -21,24 +21,24 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
 ![ensembleSINDy_heatmap](/SINDY/results/ensembleSINDy_heatmap.png)  
 
     
-[SINDy/main_runEnsembleSINDy_UQ.m](SINDy/main_runEnsembleSINDy_UQ.m)   
+[SINDy/main_runEnsembleSINDy_UQ.m](/SINDY/main_runEnsembleSINDy_UQ.m)   
  * for one particular noise level and data length, run Enesmble-SINDy and get plots of:
     * SINDy coefficient uncertainties and inclusion probabilities
     * ensemble dynamics reconstruction and forecast 
 
 #### Lotka Volterra Lynx and Hare polpulation data 1900-1920 Hudson Bay Company
 
-[SINDy/main_runLotkaVolterra.m](SINDy/main_runLotkaVolterra.m)  
+[SINDy/main_runLotkaVolterra.m](/SINDY/main_runLotkaVolterra.m)  
  * SINDy coefficient uncertainties and inclusion probabilities
  * ensemble dynamics reconstruction
 
 
 ## Ensemble-PDE-FIND
 
-[PDE-FIND/main_weakEnsemblePDE.m](PDE-FIND/main_weakEnsemblePDE.m)  
+[PDE-FIND/main_weakEnsemblePDE.m](/PDE-FIND/main_weakEnsemblePDE.m)  
  * run comparison (model error and success rate) between weak PDE-FIND and weak-ensemble PDE-FIND to identify five different PDEs from very noisy data
 
-[PDE-FIND/main_get_FiguresTable.m](PDE-FIND/main_get_FiguresTable.m)  
+[PDE-FIND/main_get_FiguresTable.m](/PDE-FIND/main_get_FiguresTable.m)  
  * plot figures shown in table below 
 
 
