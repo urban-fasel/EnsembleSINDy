@@ -10,9 +10,7 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
 
 ## Ensemble-SINDy
 
-### Comparing different ensemble-SINDy methods 
-
-#### Lorenz system
+### Lorenz system: Comparing different ensemble-SINDy methods 
 
 [SINDy/main_runEnsembleSINDy_heatmap.m](/SINDY/main_runEnsembleSINDy_heatmap.m)  
  * compare different ensemble SINDy methods in terms of model error (error of SINDy coefficients) and success rate (probability to get the correct model structure) over a range of noise levels and data length
@@ -20,13 +18,15 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
     
 ![ensembleSINDy_heatmap](/SINDY/results/ensembleSINDy_heatmap.png)  
 
+
+### Lorenz system: UQ and ensemble forecasting
     
 [SINDy/main_runEnsembleSINDy_UQ.m](/SINDY/main_runEnsembleSINDy_UQ.m)   
  * for one particular noise level and data length, run Enesmble-SINDy and get plots of:
     * SINDy coefficient uncertainties and inclusion probabilities
     * ensemble dynamics reconstruction and forecast 
 
-#### Lotka Volterra Lynx and Hare polpulation data 1900-1920 Hudson Bay Company
+### Lotka Volterra Lynx and Hare polpulation data 1900-1920 Hudson Bay Company
 
 [SINDy/main_runLotkaVolterra.m](/SINDY/main_runLotkaVolterra.m)  
  * SINDy coefficient uncertainties and inclusion probabilities
