@@ -18,7 +18,7 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
  * compare different ensemble SINDy methods in terms of model error (error of SINDy coefficients) and success rate (probability to get the correct model structure) over a range of noise levels and data length
  * plot heatmap
     
-![ensembleSINDy_heatmap](/SINDy/results/ensembleSINDy_heatmap.png)
+![ensembleSINDy_heatmap](/SINDY/results/ensembleSINDy_heatmap.png)  
 
     
 [SINDy/main_runEnsembleSINDy_UQ.m](SINDy/main_runEnsembleSINDy_UQ.m)   
