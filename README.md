@@ -15,8 +15,11 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
 #### Lorenz system
 
 [SINDy/main_runEnsembleSINDy_heatmap.m](SINDy/main_runEnsembleSINDy_heatmap.m)  
- * compare different ensemble SINDy methods in terms of model error (error of SINDy coefficient) and success rate (probability to get correct model structure) over a range of noise levels and data length
+ * compare different ensemble SINDy methods in terms of model error (error of SINDy coefficients) and success rate (probability to get the correct model structure) over a range of noise levels and data length
  * plot heatmap
+    
+![ensembleSINDy_heatmap](/SINDy/Results/ensembleSINDy_heatmap.png)
+
     
 [SINDy/main_runEnsembleSINDy_UQ.m](SINDy/main_runEnsembleSINDy_UQ.m)   
  * for one particular noise level and data length, run Enesmble-SINDy and get plots of:
