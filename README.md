@@ -38,4 +38,4 @@ PDE-FIND/main_get_FiguresTable.m
  * plot figures shown in table below 
 
 
-EnsembleSINDy/PDE-FIND/PlotsPaper/table_ensemble-PDEFIND.pdf
+[table_ensemble-PDEFIND.pdf](https://github.com/urban-fasel/EnsembleSINDy/files/7190306/table_ensemble-PDEFIND.pdf)
