@@ -5,7 +5,6 @@ This repository contains Matlab code to reproduce the results of the paper:
 **Ensemble-SINDy: Robust sparse identification of nonlinear dynamics for ordinary- and partial differential equations with uncertainty quantification**
 
 Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.  
-University of Washington
 
 
 
