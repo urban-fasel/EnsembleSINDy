@@ -71,7 +71,7 @@ signal_power = rms(x10(:));
 % smooth data using golay filter 
 sgolayON = 1;
 
-runSim = 1; % run sim or load data
+runSim = 0; % run sim or load data
 
 if runSim
     
