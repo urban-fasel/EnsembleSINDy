@@ -29,7 +29,7 @@ SINDy/main_runLotkaVolterra.m
  * ensemble dynamics reconstruction
 
 
-## PDE-FIND
+## Ensemble-PDE-FIND
 
 PDE-FIND/main_weakEnsemblePDE.m
  * run comparison between weak PDE-FIND and weak-ensemble PDE-FIND to identify five different PDEs fromvery noisy data
@@ -38,4 +38,4 @@ PDE-FIND/main_get_FiguresTable.m
  * plot figures shown in table below 
 
 
-![table_ensemble-PDEFIND.pdf](https://github.com/urban-fasel/EnsembleSINDy/files/7190306/table_ensemble-PDEFIND.pdf)
+![table_ensemble-PDEFIND](https://user-images.githubusercontent.com/60729896/133896254-97fb3164-c0e2-485b-8469-d92ce4a4a6b1.png)
