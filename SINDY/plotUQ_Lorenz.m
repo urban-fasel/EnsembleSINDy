@@ -25,6 +25,13 @@ Clb = C10;
 ClbA = Clb;
 Clb2 = C7;
 
+colors = viridis(100);
+% Cs = colors(98,:); 
+% Clb = colors(70,:); 
+
+fos = 10; % fontsize
+fosT = 14; % fontsize
+
 plotAllDist = 1; % plot all or only thresholded distributions 
 
 sizeX = 600;
@@ -104,31 +111,32 @@ for ip = 1:nP1
         end
         if ip==nP1
             if jp == 1
-                xlabel('Coefficient value (xDot)')
+                xlabel('Coefficient value (xDot)','interpreter','latex','FontSize',fos)
             elseif jp == 2
-                xlabel('Coefficient value (yDot)')
+                xlabel('Coefficient value (yDot)','interpreter','latex','FontSize',fos)
             else
-                xlabel('Coefficient value (zDot)')
+                xlabel('Coefficient value (zDot)','interpreter','latex','FontSize',fos)
             end
+            set(gca,'ticklabelinterpreter','latex','FontSize',fos)
         end
         
         if ip == 1
         	if jp == 1
-                title('xDot')
+                title('xDot','interpreter','latex','FontSize',fos)
             elseif jp == 2
-                title('yDot')
+                title('yDot','interpreter','latex','FontSize',fos)
             else 
-                title('zDot')
+                title('zDot','interpreter','latex','FontSize',fos)
             end
         end
         
         if jp == 1
-            ylabel(lib{ip,1})
+            ylabel(lib{ip,1},'interpreter','latex','FontSize',fos)
         end
         
         nn = nn + 1;
     end
 end
 
-sgtitle('Uncertainty in model parameters')
+sgtitle('Uncertainty in model parameters','interpreter','latex','FontSize',fosT)
 
