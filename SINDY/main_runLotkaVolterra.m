@@ -26,7 +26,7 @@ true_nz_weights(4,2) = d;
 
 % common parameters
 n = 2;
-polys = 0:3; % if changed, also change sparseGalerkin.m function, as it it is optimised for polys = 0:3
+polys = 0:3; % if changed, also change sparseGalerkin.m function, as it is optimised for polys = 0:3
 gamma = 0;
 common_params = {polys,[]};
 
@@ -37,11 +37,6 @@ Theta = build_theta(xobs,common_params);
 
 %% calculate derivatives
 dtL = 1;
-
-% % Second order centered difference with third order forward/backward difference at endpoints.
-% dxobs(1,:) = (-11/6*xobs(1,:) + 3*xobs(2,:) -3/2*xobs(3,:) + xobs(4,:)/3)/dtL;
-% dxobs(2:size(xobs,1)-1,:) = (xobs(3:end,:)-xobs(1:end-2,:))/(2*dtL);
-% dxobs(size(xobs,1),:) = (11/6*xobs(end,:) - 3*xobs(end-1,:) + 3/2*xobs(end-2,:) - xobs(end-3,:)/3)/dtL;
 
 % Fourth order centered difference with third order forward/backward difference at endpoints.
 dxobs(1,:)=(-11/6*xobs(1,:) + 3*xobs(2,:) -3/2*xobs(3,:) + xobs(4,:)/3)/1;
@@ -55,7 +50,7 @@ nEnsemble2 = 150;
 ensT = 0.65;
 nEnsemble1P = 0.85;
 ensembleT = 0.8;
-nEnsemblesDD = 1000; % 100; % larger ensemble for refined UQ if using plotUQtimeseriesELVbootstrap
+nEnsemblesDD = 1000; % larger ensemble for refined UQ if using plotUQtimeseriesELVbootstrap
 lambda = 0.19;
 
 
@@ -100,6 +95,9 @@ inclProbDB = zeros(size(Theta,2),n);
 XiDBs = zeros(size(Theta,2),n);
 XiDBeOut = zeros(size(Theta,2),n,nEnsemblesDD);
 XiDBeOut2 = zeros(size(Theta,2),n,nEnsemblesDD);
+
+OOSsmallOut = zeros(nEnsemblesDD,n);
+
 for iii = 1:n
     libEntry = inclProbBS(:,iii)>ensT;
     bootstatDD = bootstrp(nEnsemblesDD,@(Theta,dx)sparsifyDynamics(Theta,dx,lambda,1,gamma),Theta(:,libEntry),dxobs(:,iii)); 
@@ -135,56 +133,19 @@ for iii = 1:n
     end
 end
 
-% nWrongTermsDDE = sum(sum(abs((true_nz_weights~=0) - (XiDB~=0))));
-% modelErrorDDE = norm(XiDB-true_nz_weights)/norm(true_nz_weights);
-% successDDE = norm((true_nz_weights~=0) - (XiDB~=0))==0;
- 
-%% comparison observed data, standard SINDy, and parameter estimation Seth Hirsh
-
-% SINDy dynamics 
-[~,xSINDY]=ode45(@(t,x)sparseGalerkin(t,x,XiDB,polys),tspan,xobs(1,:),options);  % approximate
-
-% parameter estimation Seth Hirsh dynamics
-[~,xS]=ode45(@(t,x)sparseGalerkin(t,x,true_nz_weights,polys),tspan,xobs(1,:),options);  % approximate
-
-% plot 
-sizeX = 600;
-sizeY = 500;
-lw = 1.5;
-figure('Position', [10 10 sizeX sizeY])
-subplot(2,1,1)
-plot(tspan,xobs(:,1),'Color','b','LineWidth',lw); hold on
-plot(tspan,xSINDY(:,1),'Color','r','LineWidth',lw); hold on
-plot(tspan,xS(:,1),'--','Color','k','LineWidth',lw); hold on
-legend({'observed dynamics','Library bagging','estimate Seth'},'NumColumns',3)
-
-subplot(2,1,2)
-plot(tspan,xobs(:,2),'Color','b','LineWidth',lw); hold on
-plot(tspan,xSINDY(:,2),'Color','r','LineWidth',lw); hold on
-plot(tspan,xS(:,2),'--','Color','k','LineWidth',lw); hold on
-
 
 %% plot UQ time series: ensemble forecast
-% draw multiple models and average -> bagging forecast (goes to mean for large nE)
-
-nUQ = 1000;%5000; % number of samples for UQ
-nE = 5; % number of ensembles for forecast
-pct = 95; % plot pct% confidence interval 
-%     nE = 1; % number of ensembles for forecast
-%     pct = 90; % plot pct% confidence interval 
-
-% V1: draw from coefficient probabilities
-plotUQ_LV_timeseries(XiDB,XiDBs,xobs(1,:),tspan,polys,nUQ,pct,nE,tspan,xobs,options,lhpop)
-
-% V2: draw not from each coefficient probability, but from different models in the ensemble
+% draw not from each coefficient probability, but draw 5 different models from the ensemble and average
+% we can compare this to the posterior predictive distribution (PPD) from Hirsh 2021.
 nUQ = size(XiDBeOut,3);
-pct = 68; % plot pct% confidence interval 
-plotUQ_LV_timeseriesBootstrap(XiDB,XiDBeOut2,XiDBs,xobs(1,:),tspan,polys,nUQ,pct,nE,tspan,xobs,options,lhpop)
-
+nE = 5; % number of ensembles for forecast
+pct = 95; % plot prctile 
+plotUQ_LV_timeseries(XiDB,XiDBeOut2,XiDBs,xobs(1,:),tspan,polys,nUQ,pct,nE,tspan,xobs,options,lhpop)
 
 %% plot uncertainty in coefficients
-lib = {'1';'u';'v';'uv';'vv';'uu';'uvv';'uuv';'vvv';'uuu'};
-plotUQ_LV(XiDBeOut,true_nz_weights,XiDB,lib)
+lib = {'1 ';'u ';'v ';'uv';'vv';'uu'};
+XiDBeOutFigure = XiDBeOut(1:6,:,:);
+plotUQ_LV(XiDBeOutFigure,true_nz_weights,XiDB,lib)
 
 
 %% inclusion probability
