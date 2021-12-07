@@ -41,4 +41,23 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
 [PDE-FIND/main_get_FiguresTable.m](/PDE-FIND/main_get_FiguresTable.m)  
  * plot figures shown in table below 
 
+[PDE-FIND/main_weakEnsemblePDE_success09.m](/PDE-FIND/main_weakEnsemblePDE_success09.m)  
+ * compare noise levels for different PDEs where weak PDE-FIND and weak-ensemble PDE-FIND success rate drops below 0.90.
+
 ![table_ensemble-PDEFIND](/PDE-FIND/PlotsPaper/table_ensemble-PDEFIND.png)
+
+
+## Active E-SINDy
+
+[Active_and_control/Active/main_activePlot1and2.m](/Active_and_control/Active/main_activePlot1and2.m)  
+ * plots active E-SINDy left and center figure 
+
+[Active_and_control/Active/main_activePlot3.m](/Active_and_control/Active/main_activePlot3.m)  
+ * plots active E-SINDy right figure 
+
+
+## MPC E-SINDy
+
+[Active_and_control/MPC/main_MPC.m](/Active_and_control/MPC/main_MPC.m)  
+ * compare SINDy with E-SINDy for model predictive control
+
