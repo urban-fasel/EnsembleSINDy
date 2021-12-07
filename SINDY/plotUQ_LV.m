@@ -25,15 +25,24 @@ Clb = C10;
 ClbA = Clb;
 Clb2 = C7;
 
+mymap3 = [255,237,160
+    254,178,76
+    240,59,32]./255;
+
+
+fos = 10; % for data plot
+% fos = 14; % for label plot
+fosT = 14; % fontsize
+
 plotAllDist = 1; % plot all or only thresholded distributions 
 
 sizeX = 400;
-sizeY = 500;
+sizeY = 400;
 
 figure('Position', [10 10 sizeX sizeY])
 
 nbins = 10;
-yBB = 600; % y blue background
+yBB = 1000; % y blue background
 nP1 = size(XiE,1);
 nP2 = size(XiE,2);
 
@@ -46,21 +55,22 @@ for ip = 1:nP1
         xPtest = xPtest(:);
 
         if jp == 1
-            Clb = 'r';%C5;
+            Clb = mymap3(3,:);%C5;%'r';%Clb;
             Clb2 = C7;%C5;
         else
-            Clb = 'b';%C10;
+            Clb = C10;%C2;%'b';%C10;
             Clb2 = C7;%C10;
         end
         
         subplot(nP1,nP2,nn)
-        if (XiTrue(ip,jp)~=0)
-%             axis on
-            patch([xmin(jp) xmin(jp) xmax(jp) xmax(jp)],[0 yBB yBB 0],Clb,'FaceAlpha',0.1); hold on
-        end
+%         if (XiTrue(ip,jp)~=0)
+% %             axis on
+%             patch([xmin(jp) xmin(jp) xmax(jp) xmax(jp)],[0 yBB yBB 0],Clb,'FaceAlpha',0.1); hold on
+%         end
         if plotAllDist
             if sum(xPtest~=0) > 0
-                h = histfit(xPtest,nbins,'normal'); hold on
+                h = histfit(xPtest,nbins,'kernel'); hold on
+%                 h = histfit(xPtest,nbins,'normal'); hold on
                 h(1).FaceColor = Clb2;
                 h(1).FaceAlpha = 0;%0.5;
                 h(1).EdgeColor = Clb2;
@@ -71,8 +81,11 @@ for ip = 1:nP1
                 mY = max(h(2).YData);
                 area(h(2).XData,h(2).YData,'FaceColor',Clb,'FaceAlpha',0.4); hold on
                 ylim([0 mY])
+                if (XiTrue(ip,jp)~=0)
+                    patch([xmin(jp) xmin(jp) xmax(jp) xmax(jp)],[0 mY mY 0],Clb,'FaceAlpha',0.1); hold on
+                end
                 if Xi(ip,jp) ~= 0
-                    plot(XiTrue(ip,jp),0,'x','Color',Ct,'Linewidth',lw,'MarkerSize',8); hold on
+%                     plot(XiTrue(ip,jp),0,'x','Color',Ct,'Linewidth',lw,'MarkerSize',8); hold on
                     plot([Xi(ip,jp) Xi(ip,jp)],[0 mY],'-','Color',Clb,'Linewidth',lw); hold on
                 else
                     plot([mean(xPtest) mean(xPtest)],[0 mY],'-','Color',Clb,'Linewidth',lw); hold on
@@ -83,7 +96,8 @@ for ip = 1:nP1
             end
         else
              if Xi(ip,jp) ~= 0
-                h = histfit(xPtest,nbins,'normal');
+                h = histfit(xPtest,nbins,'kernel');
+%                 h = histfit(xPtest,nbins,'normal');
                 h(1).FaceColor = Clb2;
                 h(1).FaceAlpha = 0;%0.5;
                 h(1).EdgeColor = Clb2;
@@ -92,7 +106,7 @@ for ip = 1:nP1
                 mY = max(h(2).YData);
                 ylim([0 mY])
                 if (XiTrue(ip,jp)~=0)
-                    plot(XiTrue(ip,jp),0,'x','Color',Ct,'Linewidth',lw); hold on
+%                     plot(XiTrue(ip,jp),0,'x','Color',Ct,'Linewidth',lw); hold on
                     plot([Xi(ip,jp) Xi(ip,jp)],[0 mY],'-','Color',Clb,'Linewidth',lw); hold on
                 end
              else
@@ -108,26 +122,27 @@ for ip = 1:nP1
         end
         if ip==nP1
             if jp == 1
-                xlabel('Coefficient value (uDot)')
+                xlabel('Coefficient value (uDot)','interpreter','latex','FontSize',fos)
             elseif jp == 2
-                xlabel('Coefficient value (vDot)')
+                xlabel('Coefficient value (vDot)','interpreter','latex','FontSize',fos)
             end
+            set(gca,'ticklabelinterpreter','latex','FontSize',fos)
         end
         
         if ip == 1
         	if jp == 1
-                title('Hare, uDot')
+%                 title('Hare, uDot','interpreter','latex','FontSize',fos)
             else
-                title('Lynx, vDot')
+%                 title('Lynx, vDot','interpreter','latex','FontSize',fos)
             end
         end
         
         if jp == 1
-            ylabel(lib{ip,1})
+            ylabel(lib{ip,1},'interpreter','latex','FontSize',fos,'rotation',0,'VerticalAlignment','middle','HorizontalAlignment','right')
         end
         
         nn = nn + 1;
     end
 end
 
-sgtitle('Uncertainty in model parameters')
+sgtitle('Uncertainty in model parameters','interpreter','latex','FontSize',fosT)
