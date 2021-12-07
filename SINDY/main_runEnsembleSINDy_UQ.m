@@ -159,11 +159,12 @@ XiDB = zeros(size(Theta_0,2),n);
 XiDBmed = zeros(size(Theta_0,2),n);
 XiDBs = zeros(size(Theta_0,2),n);
 XiDBeOut = zeros(size(Theta_0,2),n,nEnsemblesDD);
+inclProbDB = zeros(size(Theta_0,2),n);
 for iii = 1:n
     libEntry = inclProbBS(:,iii)>ensT;
 
     bootstatDD = bootstrp(nEnsemblesDD,@(Theta,dx)sparsifyDynamics(Theta,dx,lambda,1,gamma),Theta_0(:,libEntry),dxobs_0(:,iii)); 
-
+    
     XiDBe = [];
     XiDBnz = [];
     for iE = 1:nEnsemblesDD
@@ -175,6 +176,7 @@ for iii = 1:n
 
     % Thresholded bootstrap aggregating (bagging, from bootstrap aggregating)
     XiDBnzM = mean(XiDBnz,2); % mean of non-zero values in ensemble
+    inclProbDB(libEntry,iii) = XiDBnzM;
     XiDBnzM(XiDBnzM<ensembleT) = 0; % threshold: set all parameters that have an inclusion probability below threshold to zero
 
     XiDBmean = mean(XiDBe,2);
@@ -245,40 +247,96 @@ C8 = [80 80 80]/255;
 C9 = [140 140 140]/255;
 C10 = [0 128 255]/255;
 
-lw = 1.0;
+lw = 1.4;
+lws = 1.0;
 lwlb = 1.0;
 
-lslb = ':'; % line style library bagging
+lslb = '-'; % line style library bagging
 
-Ct = C9;
+Ct = C7;
 Cs = C5;
-Clb = C2;
+Clb = C10;
 Clb1 = C10;
 
-sizeX = 600;
+mymap3 = [255,237,160
+    254,178,76
+    240,59,32]./255;
+
+Cs = mymap3(3,:);
+
+fos = 10;
+fosT = 14;
+
+sizeX = 550;
 sizeY = 500;
 
 figure('Position', [10 10 sizeX sizeY])
 subplot(3,1,1)
 plot(tspan,xobsPlotE(:,1),'Color',Ct,'LineWidth',lw); hold on
-plot(tspanSINDy,xSINDY(:,1),'Color',Cs,'LineWidth',lw); hold on
+plot(tspanSINDy,xSINDY(:,1),'Color',Cs,'LineWidth',lws); hold on
 plot(tspanSINDyDB,xSINDYXiDB(:,1),lslb,'Color',Clb,'LineWidth',lwlb); hold on
 ylim([-25 45])
-legend({'observed dynamics','SINDy','LB-SINDy'},'NumColumns',3)
+% legend({'observed dynamics','SINDy','Library bagging'},'NumColumns',3,'interpreter','latex','FontSize',fos, 'Location', 'North')
+legend({'observed dynamics','SINDy','LB-SINDy'},'NumColumns',3,'interpreter','latex','FontSize',fos, 'Location', 'North')
+ylabel('xdot','interpreter','latex','FontSize',fos)
+xticks([])
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 
 subplot(3,1,2)
 plot(tspan,xobsPlotE(:,2),'Color',Ct,'LineWidth',lw); hold on
-plot(tspanSINDy,xSINDY(:,2),'Color',Cs,'LineWidth',lw); hold on
+plot(tspanSINDy,xSINDY(:,2),'Color',Cs,'LineWidth',lws); hold on
 plot(tspanSINDyDB,xSINDYXiDB(:,2),lslb,'Color',Clb,'LineWidth',lwlb); hold on
 ylim([-25 25])
+ylabel('ydot','interpreter','latex','FontSize',fos)
+xticks([])
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 
 subplot(3,1,3)
 plot(tspan,xobsPlotE(:,3),'Color',Ct,'LineWidth',lw); hold on
-plot(tspanSINDy,xSINDY(:,3),'Color',Cs,'LineWidth',lw); hold on
+plot(tspanSINDy,xSINDY(:,3),'Color',Cs,'LineWidth',lws); hold on
 plot(tspanSINDyDB,xSINDYXiDB(:,3),lslb,'Color',Clb,'LineWidth',lwlb); hold on
 ylim([0 50])
-sgtitle('Reconstruction: SINDy vs. Library Bagging')
+xlabel('time, s','interpreter','latex','FontSize',fos)
+ylabel('zdot','interpreter','latex','FontSize',fos)
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 
+sgtitle('Reconstruction: SINDy vs. Library bagging','interpreter','latex','Fontsize',fosT)
+
+
+%% inclusion probability
+% multiply inclusion probability of library bagging with second inclusion probability of data bagging
+inclProb1 = inclProbBS;
+inclProb2a = inclProbDB;
+inclProb2b = inclProbBS;
+inclProb2b(inclProbDB~=0) = inclProb2b(inclProbDB~=0).*inclProbDB(inclProbDB~=0);
+
+
+%% colors figure1
+% black: x
+mymap = [240,240,240
+    189,189,189
+    99,99,99]./255;
+% green: y
+mymap = [247,252,185
+    173,221,142
+    49,163,84]./255;
+% orange: z
+mymap = [255,237,160
+    254,178,76
+    240,59,32]./255;
+% blue
+mymap = [237,248,177
+    127,205,187
+    44,127,184]./255;
+
+% blue: x
+blue = [44,127,184]./255;
+% green: y
+green = [49,163,84]./255;
+% orange: z
+orange = [240,59,32]./255;
+% colorsNew = [black; green; orange];
+colorsNew = [blue; green; orange];
 
 
 %% plot UQ time series: ensemble forecast (using standard SINDy and double library bagging)
@@ -286,24 +344,40 @@ sgtitle('Reconstruction: SINDy vs. Library Bagging')
 
 x0 = xobsPlotE(end,:)'; % final point of training data
 tspan = 0.01:0.01:5;
-nUQ = 1000; % number of samples for UQ
+nUQ = 10000; % number of samples for UQ
 % nE is the number of models use for ensemble forecasting: e.g. nE=10 uses 10 SINDy model and averages the model coefficients
-for nE = [1 10 100] % number of ensembles for forecast
-    Em = 1; % ensemble forecast method: 1) run models in parallel and take mean of prediction, or 2) take mean of model parameters and run single model
-    pct = 95; % plot pct% confidence interval 
-    skipLastRows = size(XiDB,1)-9; % speed up sampling by reducing size of library
-    polysIN = 1:2; % dont change, sparseGalerkin.m function is optimised for polys = 1:2
-    Beta = cell2mat(ode_params);
+nE = [1 10 100];
+Em = 1; % ensemble forecast method: 1) run models in parallel and take mean of prediction, or 2) take mean of model parameters and run single model
+pct = 95; % plot pct% confidence interval 
+skipLastRows = size(XiDB,1)-9; % speed up sampling by reducing size of library
+polysIN = 1:2; % dont change, sparseGalerkin.m function is optimised for polys = 1:2
+Beta = cell2mat(ode_params);
 
-    plotUQ_Lorenz_timeseries(XiDB(1:end-skipLastRows,:),XiDBs(1:end-skipLastRows,:),x0,tspan,Beta,polysIN,nUQ,pct,nE,sindy(1:end-skipLastRows,:),Em,options)
+XiDBeOutIN = XiDBeOut(1:end-skipLastRows,:,:);
+
+runUQL = 0; % run or load the cases: plots for paper plotUQ_Lorenz_timeseriesLoad2 
+if runUQL
+    for ii = 1:length(nE) % number of ensembles for forecast
+        resUQtsOut = plotUQ_Lorenz_timeseriesBootstrap(XiDB(1:end-skipLastRows,:),XiDBeOutIN,XiDBs(1:end-skipLastRows,:),x0,tspan,Beta,polysIN,nUQ,pct,nE(ii),sindy(1:end-skipLastRows,:),Em,options);
+        resUQts{ii} = resUQtsOut;
+    end
+    save('results/resUQtsoutA10000.mat','resUQts')
+else
+    resUQts = load('results/resUQtsoutA10000.mat');
+    for ii = 1:length(nE) % number of ensembles for forecast
+        plotUQ_Lorenz_timeseriesLoad2(resUQts.resUQts{ii},pct,nE,tspan,colorsNew); 
+    end
 end
 
 
-
 %% plot uncertainty in coefficients
+% manually move zz ylabel closer to the plot
 
 lib = poolDataLIST({'x','y','z'},XiDB,n,polys);    
-
+lib(1) = {'x '};
+lib(2) = {'y '};
+lib(3) = {'z '};
 skipLastRows = size(XiDB,1)-9; % speed up sampling by reducing size of library
-plotUQ_Lorenz(XiDBeOut(1:end-skipLastRows,:,:),true_nz_weights(1:end-skipLastRows,:),XiDB,lib)
+plotUQ_LorenzFig1(XiDBeOut(1:end-skipLastRows,:,:),true_nz_weights(1:end-skipLastRows,:),XiDB,lib)
+
 
