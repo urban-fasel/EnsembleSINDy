@@ -141,7 +141,17 @@ if runSweep
 else
     
     % load data
-    load('Results/ensembleMPCout');
+%     load('Results/ensembleMPCout');
+    load('Results/ensembleMPCoutSmall'); % only first 10 noise realizations are stored
+    
+%     xallLout = xallLout(1:10,:,:);
+%     yallLout = yallLout(1:10,:,:);
+%     zallLout = zallLout(1:10,:,:);
+%     uallLout = uallLout(1:10,:,:);
+%     xeallLout = xeallLout(1:10,:,:);
+%     yeallLout = yeallLout(1:10,:,:);
+%     zeallLout = zeallLout(1:10,:,:);
+%     ueallLout = ueallLout(1:10,:,:);
     
 end
 
@@ -182,11 +192,10 @@ nNplot = 3;
 sizeX = 400;
 sizeY = 350;
 figure('Position', [10 10 sizeX sizeY])
-iP = 2;
-nDLplot = [1 5];
+nDLplot = 11; % longest training time
 subplot(4,1,1)
-plot(tMPC,xeallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,xallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,xeallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,xallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot([tMPC(1) tMPC(end)],[xref(1) xref(1)],':','Color',C2,'Linewidth',lw5)
 plot(tTrain,xTrainPlot(:,1)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[-20 20],'k','Linewidth',lw4)
@@ -199,8 +208,8 @@ leg=legend({'E-SINDy MPC','SINDy MPC','Reference','Training'},'interpreter','lat
 leg.ItemTokenSize = [10,12];
 
 subplot(4,1,2)
-plot(tMPC,yeallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,yallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,yeallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,yallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot([tMPC(1) tMPC(end)],[xref(2) xref(2)],':','Color',C2,'Linewidth',lw5); hold on
 plot(tTrain,xTrainPlot(:,2)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[-20 20],'k','Linewidth',lw4)
@@ -210,8 +219,8 @@ set(gca,'ticklabelinterpreter','latex','FontSize',fosS)
 ylabel('y','interpreter','latex','FontSize',fos)
 
 subplot(4,1,3)
-plot(tMPC,zeallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,zallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,zeallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,zallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot([tMPC(1) tMPC(end)],[xref(3) xref(3)],':','Color',C2,'Linewidth',lw5); hold on
 plot(tTrain,xTrainPlot(:,3)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[0 50],'k','Linewidth',lw4)
@@ -222,8 +231,8 @@ set(gca,'ticklabelinterpreter','latex','FontSize',fosS)
 ylabel('z','interpreter','latex','FontSize',fos)
 
 subplot(4,1,4)
-plot(tMPC,ueallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,uallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,ueallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,uallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot(tTrain,xTrainPlot(:,4)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[-55 55],'k','Linewidth',lw4)
 xlim([0 tMPC(end)])
@@ -258,11 +267,10 @@ nNplot = 3;
 sizeX = 400;
 sizeY = 350;
 figure('Position', [10 10 sizeX sizeY])
-iP = 1;
-nDLplot = [1 5];
+nDLplot = 1; % shortest training time
 subplot(4,1,1)
-plot(tMPC,xeallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,xallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,xeallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,xallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot([tMPC(1) tMPC(end)],[xref(1) xref(1)],':','Color',C2,'Linewidth',lw5)
 plot(tTrain,xTrainPlot(1:51,1)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[-20 20],'k','Linewidth',lw4)
@@ -273,8 +281,8 @@ ylabel('x','interpreter','latex','FontSize',fos)
 title('50 time steps training','interpreter','latex','FontSize',fos)
 
 subplot(4,1,2)
-plot(tMPC,yeallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,yallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,yeallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,yallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot([tMPC(1) tMPC(end)],[xref(2) xref(2)],':','Color',C2,'Linewidth',lw5); hold on
 plot(tTrain,xTrainPlot(1:51,2)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[-20 20],'k','Linewidth',lw4)
@@ -284,8 +292,8 @@ set(gca,'ticklabelinterpreter','latex','FontSize',fosS)
 ylabel('y','interpreter','latex','FontSize',fos)
 
 subplot(4,1,3)
-plot(tMPC,zeallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,zallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,zeallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,zallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot([tMPC(1) tMPC(end)],[xref(3) xref(3)],':','Color',C2,'Linewidth',lw5); hold on
 plot(tTrain,xTrainPlot(1:51,3)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[0 50],'k','Linewidth',lw4)
@@ -296,8 +304,8 @@ set(gca,'ticklabelinterpreter','latex','FontSize',fosS)
 ylabel('z','interpreter','latex','FontSize',fos)
 
 subplot(4,1,4)
-plot(tMPC,ueallLout(nNplot,:,nDLplot(iP)),'b','Linewidth',lw1); hold on
-plot(tMPC,uallLout(nNplot,:,nDLplot(iP)),'r--','Linewidth',lw2); hold on
+plot(tMPC,ueallLout(nNplot,:,nDLplot),'b','Linewidth',lw1); hold on
+plot(tMPC,uallLout(nNplot,:,nDLplot),'r--','Linewidth',lw2); hold on
 plot(tTrain,xTrainPlot(1:51,4)','Color',C1,'Linewidth',lw3); hold on
 plot([tTrain(end) tTrain(end)],[-55 55],'k','Linewidth',lw4)
 xlim([0 tMPC(end)])
