@@ -8,6 +8,8 @@ clear all
 close all
 clc
 
+addpath(genpath('colormaps'))
+
 %% sweep over a set of noise levels and data length to generate heatmap plots
 % noise level
 epsL = 0.0:0.005:0.05;
@@ -16,8 +18,8 @@ epsL = 0.0:0.005:0.05;
 tEndL = 1.0:1.0:10;
 
 % at each noise level and simulation time, nTest different instantiations of noise are run (model errors and success rate are then averaged for plotting)
-nTest1 = 2; %1000; % generate models nTest1 times for SINDy
-nTest2 = 2; %1000; % generate models nTest times for ensemble SINDy
+nTest1 = 1000; % generate models nTest1 times for SINDy
+nTest2 = 1000; % generate models nTest times for ensemble SINDy
 
 
 %% hyperparameters
@@ -81,10 +83,10 @@ runS = 1; % run SINDy and w-SINDy
 runE = 1; % run Ensemble on data
 runEL = 1; % run Ensemble on library
 runJK = 0; % run jackknife sampling
-runDoubleBag = 1; % run double bagging: first library then data bagging
+runDoubleBag = 0; % run double bagging: first library then data bagging
 runWR = 0; % bagging and bragging without replacement
 
-saveTrue = 0;
+saveTrue = 1;
 
 
 %% run SINDY
@@ -163,6 +165,13 @@ if runE
     successE = zeros(length(epsL),length(tEndL),nTest2);
     successE2 = zeros(length(epsL),length(tEndL),nTest2);
 
+    nWrongTermsEoos = zeros(length(epsL),length(tEndL),nTest2);
+    modelErrorEoos = zeros(length(epsL),length(tEndL),nTest2);
+    successEoos = zeros(length(epsL),length(tEndL),nTest2);
+    nWrongTermsEoos2 = zeros(length(epsL),length(tEndL),nTest2);
+    modelErrorEoos2 = zeros(length(epsL),length(tEndL),nTest2);
+    successEoos2 = zeros(length(epsL),length(tEndL),nTest2);
+    
     % ensembling without replacement
     nWrongTermsWRE = zeros(length(epsL),length(tEndL),nTest2);
     nWrongTermsWRE2 = zeros(length(epsL),length(tEndL),nTest2);
@@ -232,22 +241,38 @@ for ieps = 1:length(epsL)
 
                 %% SINDy ensemble
 
-                bootstat = bootstrp(nEnsembles,@(Theta,dx)sparsifyDynamics(Theta,dx,lambda,n,gamma),Theta_0,dxobs_0);
+%                 bootstat = bootstrp(nEnsembles,@(Theta,dx)sparsifyDynamics(Theta,dx,lambda,n,gamma),Theta_0,dxobs_0);
+                [bootstat,bootstatn] = bootstrp(nEnsembles,@(Theta,dx)sparsifyDynamics(Theta,dx,lambda,n,gamma),Theta_0,dxobs_0); 
 
                 for iE = 1:nEnsembles
                     XiE(:,:,iE) = reshape(bootstat(iE,:),size(Theta_0,2),n);
                     XiEnz(:,:,iE) = XiE(:,:,iE)~=0;
                 end
 
+                % only consider ensemble members with small out of sample error
+                for jj = 1:nEnsembles
+                    XX = [1:size(Theta_0,1), bootstatn(:,jj)'];
+                    nUnique = histc(XX, unique(XX));
+                    uniqueVals = find(nUnique == 1);
+
+                    OOSeps(jj) = sum(abs(1-mean((Theta_0(uniqueVals,:)*XiE(:,:,jj))./dxobs_0(uniqueVals,:))));
+                end
+                [~,OOSsmall] = mink(OOSeps,round(0.1*nEnsembles)); % choose 10% best models
+
+                
                 % Thresholded bootstrap aggregating (bagging, from bootstrap aggregating)
                 XiEnzM = mean(XiEnz,3); % mean of non-zero values in ensemble
                 XiEnzM(XiEnzM<ensembleT) = 0; % threshold: set all parameters that have an inclusion probability below threshold to zero
 
                 Xi = mean(XiE,3);
                 XiMedian = median(XiE,3);
+                XiOOS = mean(XiE(:,:,OOSsmall),3);
+                XiOOSmed = median(XiE(:,:,OOSsmall),3);
 
                 Xi(XiEnzM==0)=0; 
                 XiMedian(XiEnzM==0)=0; 
+                XiOOS(XiEnzM==0)=0; 
+                XiOOSmed(XiEnzM==0)=0; 
                 
                 
                 %% SINDy ensemble without replacement
@@ -394,6 +419,13 @@ for ieps = 1:length(epsL)
                 successE(ieps,idt,ii) = norm((true_nz_weights~=0) - (XiMedian~=0))==0;
                 successE2(ieps,idt,ii) = norm((true_nz_weights~=0) - (Xi~=0))==0;
                 
+                nWrongTermsEoos(ieps,idt,ii) = sum(sum(abs((true_nz_weights~=0) - (XiOOS~=0))));
+                modelErrorEoos(ieps,idt,ii) = norm(XiOOS-true_nz_weights)/norm(true_nz_weights);
+                successEoos(ieps,idt,ii) = norm((true_nz_weights~=0) - (XiOOS~=0))==0;
+                nWrongTermsEoos2(ieps,idt,ii) = sum(sum(abs((true_nz_weights~=0) - (XiOOSmed~=0))));
+                modelErrorEoos2(ieps,idt,ii) = norm(XiOOSmed-true_nz_weights)/norm(true_nz_weights);
+                successEoos2(ieps,idt,ii) = norm((true_nz_weights~=0) - (XiOOSmed~=0))==0;
+                
                 if runWR
                     nWrongTermsWRE(ieps,idt,ii) = sum(sum(abs((true_nz_weights~=0) - (XiWRMedian~=0))));
                     nWrongTermsWRE2(ieps,idt,ii) = sum(sum(abs((true_nz_weights~=0) - (XiWR~=0))));
@@ -438,16 +470,17 @@ end
 end
 
 
-% load data if not all cases are run for plot 
-if ~runS
-    load('results/simOutSFinalPaper');
-end
-if ~runE
-    load('results/simOutEFinalPaper');
-end
-if ~runEL
-    load('results/simOutELFinalPaper');
-end
+% % load data if not all cases are run for plot 
+% if ~runS
+%     load('results/simOutSFinalPaper');
+% end
+% warning('might load data ...')
+% if ~runE
+%     load('results/simOutEFinalPaper');
+% end
+% if ~runEL
+%     load('results/simOutELFinalPaper');
+% end
 
 else
     
@@ -460,4 +493,3 @@ end
 
 %% plot results
 plotHeatMap
-
