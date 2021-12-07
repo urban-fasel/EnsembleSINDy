@@ -112,7 +112,9 @@ for iii = 1:n
     Xi(libEntry,iii) = XiBias;
 end
 
-if LBp.DB
+if ~LBp.DB
+    XiDBs = zeros(size(Theta_0,2),n);
+else
     XiDB = zeros(size(Theta_0,2),n);
     XiDBmed = zeros(size(Theta_0,2),n);
     XiDBs = zeros(size(Theta_0,2),n);
@@ -152,6 +154,61 @@ if LBp.DB
     Xi = XiDB;
 %     Xi = XiDBmed;
 end
+
+
+%% plot UQ
+
+% % true values for KS
+% ip = [4 6 10];
+% ipV = [-1 -1 -0.5];
+% xl = [-1.5 0];
+% % % true values for NLS
+% % ip = [4 16 ];
+% % ipV = [0.5 1];
+% % xl = [0 1.5];
+% 
+% XiUQ = zeros(nn,nEnsemblesDD);
+% XiUQ(libEntry,:) = XiDBe;
+% 
+% Clb = [0 0 1];
+% Clb2 = [0 0 1];
+% 
+% % figure
+% for i = 1:length(ip)
+%     xPtest = XiUQ(ip(i),:);
+%     xPtest = xPtest(:);
+% 
+%     nbins = 20;
+% 
+%     figure
+%     
+%     h = histfit(xPtest,nbins,'kernel'); hold on
+%     h(1).FaceColor = Clb;
+%     h(1).FaceAlpha = 0;%0.5;
+%     h(1).EdgeColor = Clb;
+%     h(1).EdgeAlpha = 0;
+%     h(2).Color = Clb;
+%     h(2).LineWidth = 1;
+%     mY = max(h(2).YData);
+%     area(h(2).XData,h(2).YData,'FaceColor',Clb2,'FaceAlpha',0.4); hold on
+%     ylim([0 mY])
+%     plot(ipV(i),0,'x','Linewidth',20)
+%     xlim(xl)
+%     
+%     figure
+%     h = histfit(xPtest,nbins,'normal'); hold on
+%     h(1).FaceColor = Clb;
+%     h(1).FaceAlpha = 0;%0.5;
+%     h(1).EdgeColor = Clb;
+%     h(1).EdgeAlpha = 0;
+%     h(2).Color = Clb;
+%     h(2).LineWidth = 1;
+%     mY = max(h(2).YData);
+%     area(h(2).XData,h(2).YData,'FaceColor',Clb2,'FaceAlpha',0.4); hold on
+%     ylim([0 mY])
+%     plot(ipV(i),0,'x','Linewidth',20)
+%     xlim(xl)
+% end
 
 %    bnds = norm(dXdt_reg).^2./abs(dXdt_reg'*Theta_reg)'.*M; 
 
