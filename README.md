@@ -55,9 +55,13 @@ Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.
 [Active_and_control/Active/main_activePlot3.m](/Active_and_control/Active/main_activePlot3.m)  
  * plots active E-SINDy right figure 
 
+![ensembleSINDyActive](/Active_and_control/Active/results/ensembleSINDyActive.png)  
+
 
 ## MPC E-SINDy
 
 [Active_and_control/MPC/main_MPC.m](/Active_and_control/MPC/main_MPC.m)  
  * compare SINDy with E-SINDy for model predictive control
+
+![ensembleSINDyMPC](/Active_and_control/MPC/results/ensembleSINDyMPC.png)  
 
