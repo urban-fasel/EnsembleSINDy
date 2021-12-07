@@ -16,7 +16,8 @@ for pde_num = 1:6
     if pde_num < 5
         load(['datasets/',pde_names{pde_num}])
     else
-        load('datasets/rxn_diff.mat')
+%         load('datasets/rxn_diff.mat')
+        load('C:\Users\ufase\OneDrive - UW\Documents\GitHub\LargeData\rxn_diff.mat')
         tPlot = 100;
         U_exact = [];
         if pde_num == 5
@@ -100,7 +101,8 @@ for pde_num = 1:6
         f = figure('Position', [10 10 sizeX sizeY]);
         set(gcf,'units','normalized')
         set(gca,'LooseInset',get(gca,'TightInset'));
-        surf(xs{1},xs{2},U_obs{1}', 'EdgeColor','none')
+%         surf(xs{1},xs{2},U_obs{1}', 'EdgeColor','none')
+        surf(xs{1},xs{2},U_obs{1}', 'EdgeColor','none','FaceColor','interp')
         xlim([min(xs{1}) max(xs{1})])
         ylim([min(xs{2}) max(xs{2})])
         if nP == 1
@@ -118,10 +120,10 @@ for pde_num = 1:6
         yticks([])
         zticks([])
         axis off
-        if pde_num == 5 || pde_num == 6
-            view([15 15])
-            axis equal
-        end
+%         if pde_num == 5 || pde_num == 6
+%             view([15 15])
+%             axis equal
+%         end
         saveas(gcf,['PlotsPaper/',pde_Plot{pde_num}, num2str(nP),'3D','.png'])
     end
 end
