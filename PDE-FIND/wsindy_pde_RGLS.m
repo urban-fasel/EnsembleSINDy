@@ -28,7 +28,8 @@ for k=1:num_eq
     if isempty(M_scale)
 %         [W(:,k),its,thrs_EL] = sparsifyDynamics(G, b(:,k), lambda, gamma, M);
         if LBp.LB
-            [W(:,k),its,thrs_EL,XiDBs(:,k)] = sparsifyDynamicsLB(G, b(:,k), lambda, gamma, M, LBp);    
+%             [W(:,k),its,thrs_EL,XiDBs(:,k)] = sparsifyDynamicsLB(G, b(:,k), lambda, gamma, M, LBp); 
+            [W(:,k),its,thrs_EL,XiDBs(:,k)] = sparsifyDynamicsLB_OOBE(G, b(:,k), lambda, gamma, M, LBp); 
         else
             [W(:,k),its,thrs_EL] = sparsifyDynamics(G, b(:,k), lambda, gamma, M); 
             XiDBs = [];
@@ -38,6 +39,7 @@ for k=1:num_eq
 %         [W(:,k),its,thrs_EL] = sparsifyDynamics(G, b(:,k), lambda, gamma, M(:,end));
         if LBp.LB
             [W(:,k),its,thrs_EL,XiDBs(:,k)] = sparsifyDynamicsLB(G, b(:,k), lambda, gamma, M(:,end), LBp);    
+%             [W(:,k),its,thrs_EL,XiDBs(:,k)] = sparsifyDynamicsLB_OOBE(G, b(:,k), lambda, gamma, M(:,end), LBp);    
         else
             [W(:,k),its,thrs_EL] = sparsifyDynamics(G, b(:,k), lambda, gamma, M(:,end)); 
             XiDBs = [];
