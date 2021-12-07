@@ -2,10 +2,11 @@
  
 This repository contains Matlab code to reproduce the results of the paper:
   
-**Ensemble-SINDy: Robust sparse identification of nonlinear dynamics for ordinary- and partial differential equations with uncertainty quantification**
+**Ensemble-SINDy: Robust sparse model discovery in the low-data, high-noise limit, with active learning and control**
 
 Urban Fasel, J. Nathan Kutz, Bingni W. Brunton, Steven L. Brunton.  
 
+https://arxiv.org/pdf/2111.10992.pdf
 
 
 ## Ensemble-SINDy
