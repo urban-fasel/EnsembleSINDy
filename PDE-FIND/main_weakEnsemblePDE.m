@@ -14,16 +14,18 @@
 %%%%%%%%%%%% For Paper, "Weak SINDy for Partial Differential Equations"
 %%%%%%%%%%%% by D. A. Messenger and D. M. Bortz
 %%%%%%%%%%%%
+%%%%%%%%%%%% modified by Urban Fasel
+%%%%%%%%%%%%
 
-clc
+% clc
 clear all
 close all
 
 % run weak-ensemble or standard weak pde-find
-runEns = 1;
+runEns = 0;
 
 % choose PDE
-pde_num = 2;
+pde_num = 5;
 pde_names = {'burgers.mat','KdV.mat','KS.mat','NLS.mat','rxn_diff'};
 
 % load data 
@@ -49,9 +51,11 @@ noise_alg = 0;
 
 % Messenger et al run WSINDy on 200 instantiations of noise and average the results
 % of error statistics: 200 runs sufficiently reduces variance in the results
-nNoise = 1;%200;
+nNoise = 199;
+iStart = 1;
 
-for iN = 1:nNoise
+% for iN = 1:nNoise
+for iN = iStart:iStart+nNoise
     rng(iN,'twister')
     rng_seed = rng().Seed; 
 
@@ -90,6 +94,7 @@ for iN = 1:nNoise
         tauhat = 1;
     end
     toggle_scale = 2;
+%     toggle_scale = 0;
 
     %---------------- regularized least squares solve
 
@@ -115,9 +120,9 @@ for iN = 1:nNoise
     end
 
     if pde_num==2
-        xIn = [400;0.20;0.95;0.95;100;0.02];
+        xIn = [400;0.4;0.95;0.95;100;0.02];
         % Model error and success rate: weak-ensemble
-        % nNoise = 200: 0.1193    0.9950
+        % nNoise = 200: 0.0402    1.0000
         % Model error and success rate: weak PDE-FIND
         % nNoise = 200: 0.2745    0.9350 
     end
@@ -127,7 +132,7 @@ for iN = 1:nNoise
         % Model error and success rate: weak-ensemble
         % nNoise = 200:  0.2473    0.9950
         % Model error and success rate: weak PDE-FIND
-        % nNoise = 200: 0.0667    1.0000
+        % nNoise = 200: 0.2946    0.8750
     end
 
     if pde_num==4
@@ -180,17 +185,18 @@ for iN = 1:nNoise
     %% results
 
     % model error
-    error(iN) = norm(W-true_nz_weightsOut)/norm(true_nz_weightsOut);
-    success(iN) = norm((true_nz_weightsOut~=0) - (W~=0))==0;
-
-    % % error calculated such as in Sam Rudy PDE-FIND 2017
-    % errorSamRudy(iN) = mean(abs(true_nz_weightsOut(true_nz_weightsOut~=0) - W(true_nz_weightsOut~=0))./abs(true_nz_weightsOut(true_nz_weightsOut~=0)));
-    % stdSamRudy(iN) = std(abs(true_nz_weightsOut(true_nz_weightsOut~=0) - W(true_nz_weightsOut~=0))./abs(true_nz_weightsOut(true_nz_weightsOut~=0)));
+    error(iN-iStart+1) = norm(W-true_nz_weightsOut)/norm(true_nz_weightsOut);
+    success(iN-iStart+1) = norm((true_nz_weightsOut~=0) - (W~=0))==0;
+    
+    % error calculated such as in Sam Rudy PDE-FIND 2017
+    errorSamRudy(iN-iStart+1) = mean(abs(true_nz_weightsOut(true_nz_weightsOut~=0) - W(true_nz_weightsOut~=0))./abs(true_nz_weightsOut(true_nz_weightsOut~=0)));
+    stdSamRudy(iN-iStart+1) = std(abs(true_nz_weightsOut(true_nz_weightsOut~=0) - W(true_nz_weightsOut~=0))./abs(true_nz_weightsOut(true_nz_weightsOut~=0)));
 
 end
 
+
 % model error and success rate for comparison
-out = [mean(error) mean(success)] %mean(errorSamRudy) mean(stdSamRudy)]
+out = [mean(error) mean(success) mean(errorSamRudy) mean(stdSamRudy)]
 
 
 %% plot 
