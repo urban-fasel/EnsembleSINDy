@@ -40,7 +40,7 @@ successDEJKm      = mean(successDEJK,3)'; % Library Bagging
 
 %% labels
 legendN = 'Simulation time = ';
-xlabelN = 'noise level';
+xlabelN = 'noise level, \%';
 ylabelN = 'data length, s';
 
 ylimnwt = [0 2];
@@ -53,6 +53,7 @@ ylimSRTicks = 0:0.25:1;
 pX = epsL;
 pL = tEndL;
 pXp = pX(1:2:end);
+pXticks = ['0'; '1'; '2'; '3'; '4'; '5'];
 pLp = pL;
 
 %% colormaps
@@ -74,8 +75,59 @@ mymap = [C2
     C5
     yellow];
 
-interpMap = interp1(1:5,mymap,linspace(1,5,200));
-        
+white = [1 1 1];
+dblue = [118,179,239]/255;
+lblue = [168,213,235]/255;
+yellow = [254,214,89]/255;
+orange = [255,178,92]/255;
+red = [251,112,85]/255;
+
+mymap2 = [white
+    lblue
+    dblue
+    yellow
+    orange
+    red];
+
+% https://colorbrewer2.org/#type=sequential&scheme=YlOrRd&n=3
+% mymap3 = [237,248,177
+%     127,205,187
+%     44,127,184]./255;
+mymap3 = [222,235,247
+    158,202,225
+    49,130,189]./255;
+mymap3 = [236,231,242
+    166,189,219
+    43,140,190]./255;
+% mymap3 = [1,1,1
+%     C2
+%     C10];
+% mymap3 = [255,247,188
+%     254,196,79
+%     217,95,14]./255;
+mymap3 = [255,237,160
+    254,178,76
+    240,59,32]./255;
+
+% mymap = [1 1 0
+%     0 0 1];
+% 
+% mymap = [1 0 0
+%     0 0 1];
+
+magma2 = magma(5);
+magma2(1,:) = [1 1 1]*0.3;
+magma2 = interp1(1:5,magma2,linspace(1,5,200));
+ 
+
+% interpMap = interp1(1:5,mymap,linspace(1,5,200));
+% interpMap = interp1(1:6,flip(mymap2),linspace(1,6,200));
+interpMap = interp1(1:3,flip(mymap3),linspace(1,3,200));
+
+% interpMap = interp1(1:5,mymap,linspace(1,5,200));
+% yellow2blue = interp1(1:2,mymap,linspace(1,2,200));
+% red2blue = interp1(1:2,mymap,linspace(1,2,200));
+      
 m = 100;
 m1 = floor(m*0.5);
 r = (0:m1-1)'/max(m1,1);
@@ -87,12 +139,17 @@ redblue = [r g b];
 
 % colormapN = summer;
 % colormapN = redblue;
-% colormapN = flip(interpMap);
+colormapN = flip(interpMap);
 % colormapN = flip(inferno(100));
 % colormapN = flip(viridis(100));
-colormapN = flip(plasma(100));
+% colormapN = flip(plasma(100));
 % colormapN = flip(turbo(100));
-% colormapN = flip(magma(100));
+colormapN = flip(magma(100));
+% colormapN = flip(magma2);
+% colormapN = yellow2blue;
+% colormapN = red2blue;
+% hot = colormap('hot');
+% colormapN = flip(hot);
 
 
 %% PLOT
@@ -100,15 +157,21 @@ nDat = 2;
 posCB = 'east';
 nAll = 5;
 
+fos = 10; % fontsize
+fosT = 12; % fontsize title
+
 sizeX = 1200;
-sizeY = 300;
+sizeY = 380;
 
 figure('Position', [10 10 sizeX sizeY])
 
 ax0 = subplot(nDat,nAll,1);
 c1 = colorbar;
-c1.Label.String = 'model parameter error';
+c1.Label.String = 'model coeff. error';
+c1.Label.Interpreter = 'latex';
 c1.Ticks = ylimmeTicks;
+c1.TickLabelInterpreter = 'latex';
+c1.FontSize = fos;
 caxis(ylimme)
 c1.Location = posCB;
 colormap(ax0,colormapN) 
@@ -117,7 +180,10 @@ axis off
 ax1 = subplot(nDat,nAll,1+1*nAll);
 c2 = colorbar;
 c2.Label.String = 'success rate';
+c2.Label.Interpreter = 'latex';
 c2.Ticks = ylimSRTicks;
+c2.TickLabelInterpreter = 'latex';
+c2.FontSize = fos;
 c2.Limits = ylimSR;
 caxis(ylimSR)
 c2.Location = posCB;
@@ -133,15 +199,17 @@ xticklabels([])
 yticklabels([])
 ax = gca;
 ax.YAxisLocation = 'right';
- title('SINDy')
-
+title('SINDy','interpreter','latex','FontSize',fosT)
+   
 ax3 = subplot(nDat,nAll,2+1*nAll);
 imagesc(pX,pL,successSm,ylimSR)
 colormap(ax3,flipud(colormapN))
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 yticks(pLp)
 xticks(pXp)
+xticklabels(pXticks)
 yticklabels([])
-xlabel(xlabelN)
+xlabel(xlabelN,'interpreter','latex')
 ax = gca;
 ax.YAxisLocation = 'right';
 
@@ -155,15 +223,17 @@ xticklabels([])
 yticklabels([])
 ax = gca;
 ax.YAxisLocation = 'right';
-title('Bagging')
+title('Bagging','interpreter','latex','FontSize',fosT)
 
 ax3 = subplot(nDat,nAll,3+1*nAll);
 imagesc(pX,pL,successEm,ylimSR)
 colormap(ax3,flipud(colormapN))
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 yticks(pLp)
 xticks(pXp)
+xticklabels(pXticks)
 yticklabels([])
-xlabel(xlabelN)
+xlabel(xlabelN,'interpreter','latex')
 ax = gca;
 ax.YAxisLocation = 'right';
 
@@ -177,15 +247,17 @@ xticklabels([])
 yticklabels([])
 ax = gca;
 ax.YAxisLocation = 'right';
-title('Bragging')
+title('Bragging','interpreter','latex','FontSize',fosT)
 
 ax3 = subplot(nDat,nAll,4+1*nAll);
 imagesc(pX,pL,successEmedm,ylimSR)
 colormap(ax3,flipud(colormapN))
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 yticks(pLp)
 xticks(pXp)
+xticklabels(pXticks)
 yticklabels([])
-xlabel(xlabelN)
+xlabel(xlabelN,'interpreter','latex')
 ax = gca;
 ax.YAxisLocation = 'right';
 
@@ -193,21 +265,24 @@ ax.YAxisLocation = 'right';
 ax2 = subplot(nDat,nAll,5);
 imagesc(pX,pL,modelErrorDDEm,ylimme)
 colormap(ax2,colormapN) 
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 yticks(pLp)
 xticks(pXp)
 xticklabels([])
-ylabel(ylabelN)
+ylabel(ylabelN,'interpreter','latex')
 ax = gca;
 ax.YAxisLocation = 'right';
-title('Lib. Bagging')
+title('Library bagging','interpreter','latex','FontSize',fosT)
 
 ax3 = subplot(nDat,nAll,5+1*nAll);
 imagesc(pX,pL,successDDEm,ylimSR)
 colormap(ax3,flipud(colormapN))
+set(gca,'ticklabelinterpreter','latex','FontSize',fos)
 yticks(pLp)
 xticks(pXp)
-ylabel(ylabelN)
-xlabel(xlabelN)
+xticklabels(pXticks)
+ylabel(ylabelN,'interpreter','latex')
+xlabel(xlabelN,'interpreter','latex')
 ax = gca;
 ax.YAxisLocation = 'right';
 
