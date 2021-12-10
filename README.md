@@ -14,7 +14,7 @@ https://arxiv.org/pdf/2111.10992.pdf
 ### Lorenz system: Comparing different ensemble-SINDy methods 
 
 [SINDy/main_runEnsembleSINDy_heatmap.m](/SINDY/main_runEnsembleSINDy_heatmap.m)  
- * compare different ensemble SINDy methods in terms of model error (error of SINDy coefficients) and success rate (probability to get the correct model structure) over a range of noise levels and data length
+ * compare different ensemble SINDy methods in terms of model error (error of SINDy coefficients) and success rate (rate of identifying the correct non-zero and zero terms in the library) over a range of noise levels and data length
  * plot heatmap
     
 ![ensembleSINDy_heatmap](/SINDY/results/ensembleSINDy_heatmap.png)  
