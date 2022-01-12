@@ -36,6 +36,8 @@ https://arxiv.org/pdf/2111.10992.pdf
 
 ## Ensemble-PDE-FIND
 
+Here, we use the weak formulation [code](https://github.com/dm973/WSINDy_PDE) from [Messenger and Bortz](https://arxiv.org/abs/2007.02848) as a baseline.
+
 [PDE-FIND/main_weakEnsemblePDE.m](/PDE-FIND/main_weakEnsemblePDE.m)  
  * run comparison (model error and success rate) between weak PDE-FIND and weak-ensemble PDE-FIND to identify five different PDEs from very noisy data
 
